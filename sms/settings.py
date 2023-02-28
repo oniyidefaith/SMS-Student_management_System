@@ -34,7 +34,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 AUTH_USER_MODEL = 'auths.User'
 
 # Application definition
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     # local apps and libraries
     'auths',
+    'django_rest_passwordreset',
     'djoser',
 
 ]
@@ -96,8 +97,12 @@ WSGI_APPLICATION = 'sms.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'sms',
+        'USER': 'root',
+        'PASSWORD': os.environ.get('PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
@@ -138,25 +143,24 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 DISABLE_COLLECTSTATIC = 1
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-
-SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
-apikey = SENDGRID_API_KEY
-sg = sendgrid.SendGridAPIClient(apikey)
-EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_DEBUG = True
-EMAIL_HOST_USER = 'Oniyide Faith'
-DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-SENDGRID_SANDBOX_MODE_IN_DEBUG = True
-SENDGRID_ECHO_TO_STDOUT = True
+# SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
+# apikey = SENDGRID_API_KEY
+# sg = sendgrid.SendGridAPIClient(apikey)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_HOST = 'smtp.sendgrid.net'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_DEBUG = True
+# EMAIL_HOST_USER = 'Oniyide Faiths'
+# DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
+# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+# SENDGRID_SANDBOX_MODE_IN_DEBUG = True
+# SENDGRID_ECHO_TO_STDOUT = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-# SECURE_SSL_REDIRECT = True
-# SESSION_COOKIE_SECURE = True
-# CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
