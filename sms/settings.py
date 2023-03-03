@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     # local apps and libraries
     'auths',
+    'socialauth',
     'django_rest_passwordreset',
     'djoser',
 
@@ -146,7 +147,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
 # apikey = SENDGRID_API_KEY
 # sg = sendgrid.SendGridAPIClient(apikey)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST = 'smtp.sendgrid.net'
 # EMAIL_PORT = 587
 # EMAIL_USE_TLS = True
@@ -156,11 +156,18 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 # SENDGRID_SANDBOX_MODE_IN_DEBUG = True
 # SENDGRID_ECHO_TO_STDOUT = True
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.sendgrid.net'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'apikey'
+# EMAIL_HOST_PASSWORD = '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'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

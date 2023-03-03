@@ -9,8 +9,9 @@ from django.urls import reverse
 from django_rest_passwordreset.signals import reset_password_token_created
 from django.core.mail import send_mail
 
-
 # Create your models here.
+AUTH_PROVIDERS = {'facebook': 'facebook', 'google': 'google',
+                  'twitter': 'twitter', 'email': 'email'}
 
 
 class UserManager(BaseUserManager):
@@ -40,18 +41,21 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     username_validator = UnicodeUsernameValidator()
     username = models.CharField(_('username'), max_length=50, unique=True, db_index=True, help_text=_(
-            "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
-        ),
-        validators=[username_validator],
-        error_messages={
-            "unique": _("A user with that username already exists."),
-        },)
+        "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+    ),
+                                validators=[username_validator],
+                                error_messages={
+                                    "unique": _("A user with that username already exists."),
+                                }, )
     email = models.EmailField(unique=True, db_index=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     joined = models.DateTimeField(auto_now_add=True)
     date_joined = models.DateTimeField(_("date_joined"), default=timezone.now)
+    auth_provider = models.CharField(
+        max_length=255, blank=False,
+        null=False, default=AUTH_PROVIDERS.get('email'))
 
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "email"
@@ -71,8 +75,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 @receiver(reset_password_token_created)
 def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
-
-    email_plaintext_message = "{}?token={}".format(reverse('password_reset:reset-password-request'), reset_password_token.key)
+    email_plaintext_message = "{}?token={}".format(reverse('password_reset:reset-password-request'),
+                                                   reset_password_token.key)
 
     send_mail(
         # title:
